@@ -6,6 +6,7 @@ module Utils where
 import Data.Maybe (fromJust)
 -- import Data.List (elemIndex)
 import Data.List
+import System.Random (StdGen, Random (randomR))
 -- import Data.Unique
 
 rotationDir:: [(Int,Int)]->Int-> [(Int,Int)]
@@ -84,3 +85,18 @@ replaceAt (x, y) num table = a1 ++ (newLine:b1)
 
 sumPos :: (Int, Int) -> (Int, Int) -> (Int, Int)
 sumPos (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+
+---------------------------------------------------------------------------
+
+shuffle :: Eq a => [a] -> StdGen -> [a]
+shuffle [] _ = []
+shuffle (x:xs) seed = do
+    let (randomIndex, newSeed) = randomR (0, (length (x:xs)) - 1) seed
+    if randomIndex == 0 then (x:(shuffle xs newSeed))
+    else do
+        let (_:firstPartTail, lastPartHead:rest) = splitAt randomIndex (x:xs)
+        let newTail = firstPartTail <> (x:rest)
+        (lastPartHead:(shuffle newTail newSeed))
+
+----------------------------------------------------------------------------
+

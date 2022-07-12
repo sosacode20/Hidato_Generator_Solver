@@ -8,10 +8,7 @@ import HidatoCommon
 import Data.Maybe (isJust, fromJust, isNothing)
 import Utils
 import System.Random
--- import Data.Time.Clock (getCurrentTime)
--- import System.CPUTime (getCPUTime)
--- import
--- import GHC.Float (timesDouble)
+import GHC.Base (divInt)
 
 squareBoard :: Int -> Int -> HidatoBoard
 squareBoard n m =  
@@ -25,8 +22,8 @@ findHidatoSolution hidatoBoard (x,y) seed
         let dirs = directionFilter (board hidatoBoard) (x,y) directions
         -- timesDouble
         -- getCurrentTime
-        -- let (r, newSeed) = randomR (0, (length dirs) - 1) seed
-        -- let newDirs = rotationDir dirs r
+        -- let (_, newSeed) = randomR (0, (length dirs) - 1) seed
+        -- let newDirs = shuffle dirs seed
         -- x <- getCurrentTime
         let nextNumber = (board hidatoBoard !! x !! y) + 1 -- 5
         if dirs == [] then Nothing
@@ -60,11 +57,12 @@ generateUniqueHidato hidatoBoard seed = do
     else do
         let (cells, _, moreThanOne) = fromJust sol
         if moreThanOne then do
-            -- let (r, _) = randomR (0, (length cells) - 1) (mkStdGen 0) :: (Int, StdGen)
-            -- let (r,seed) = fun (0, (length cells) - 1)
-            let (r, newSeed) = randomR (0, (length cells) - 1) seed
-            let cellTaken = cells !! r
-            let newHidatoBoard = addCellToHidatoBoard hidatoBoard cellTaken
+            let (_, newSeed) = randomR (0, (length cells) - 1) seed
+            -- let cellTaken = cells !! r
+            -- let newHidatoBoard = addCellToHidatoBoard hidatoBoard cellTaken
+            let shuffledCells = shuffle cells seed
+            let cellsTaken = take (1) shuffledCells
+            let newHidatoBoard = addCellsToHidatoBoard hidatoBoard cellsTaken
             generateUniqueHidato newHidatoBoard newSeed
             -- Continuar la lógica
         else return hidatoBoard

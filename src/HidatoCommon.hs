@@ -1,6 +1,8 @@
 module HidatoCommon where
 
 import Utils
+import Text.Read (readMaybe)
+import Data.Maybe (fromJust, isNothing)
 
 data Cell a = Cell 
     {
@@ -125,3 +127,22 @@ printHidatosSolutions [] = putStrLn ""
 printHidatosSolutions (x:xs) = do
   putStrLn $ printHidato x
   printHidatosSolutions xs
+
+----------------------------------------------------------------------
+
+parsePosition :: String -> Maybe (Int, Int)
+parsePosition input = do
+    let trimmed = words input
+    if length trimmed /= 2 then Nothing
+    else do
+        let x = readMaybe $ trimmed !! 0
+        let y = readMaybe $ trimmed !! 1
+        if isNothing x || isNothing y then
+            Nothing
+        else Just (fromJust x, fromJust y)
+
+-------------------------------------------------------
+
+squareBoard :: Int -> Int -> HidatoBoard
+squareBoard n m =  
+    Board {board = [[0 | _ <- [1..n]] | _ <- [1..m]], minVal = 1, maxVal = n*m}

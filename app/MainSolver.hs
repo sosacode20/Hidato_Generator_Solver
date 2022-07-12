@@ -16,6 +16,22 @@ table = [
     [-1,-1,-1,-1,0,7,0,0],
     [-1,-1,-1,-1,-1,-1,5,0]
     ]
+-- table = [
+--     [0, 0, 0, 0, 0, -1, -1, -1],
+--     [0,0,0,0,0, -1,-1,-1],
+--     [0,0,0,0,0,0,-1,-1],
+--     [0,0,0,0,40,39,-1,-1],
+--     [0,0,0,0,0,0,1,-1],
+--     --[27,0,0,13,9,0,1,-1],
+--     [-1,-1,0,0,0,0,0,-1],
+--     [-1,-1,-1,-1,0,0,0,0],
+--     [-1,-1,-1,-1,-1,-1,0,0]
+--     ]
+-- table = [
+--     [0,0,0,10],
+--     [-1,0,0,-1],
+--     [1,0,0,0]
+--     ]
 
 
 main :: IO()
@@ -35,7 +51,7 @@ main = do
         let solution = solveHidato hidatoBoard initialPos
         let solutionHidato = extractHidatoBoard solution
         if solutionHidato == Empty
-            then putStrLn "Algo malo paso"
+            then putStrLn "Este Hidato no tiene solución"
         else do
             putStrLn "Solution:\n"
             putStrLn (showBoard solutionHidato)

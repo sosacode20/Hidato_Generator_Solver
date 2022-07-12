@@ -2,21 +2,25 @@ module Main where
 
 import System.Random
 import Data.Time (getCurrentTime, UTCTime (utctDayTime))
+import HidatoCommon (convertToHidatoBoard, HidatoBoard (minVal, board), printHidatosSolutions, showBoard)
+import Utils (findElement)
+import HidatoGenerator (findHidatosSolutions)
+import Data.Maybe (isJust)
 -- import System.Random.Stateful (globalStdGen)
 
 table :: [[Int]]
-table = [
-  [0,0,0,0,17],
-  [0,0,0,0,-1],
-  [-1,-1,0,0,0],
-  [1,0,0,0,0]
-  ]
 -- table = [
---   [0,11,0,0,17],
---   [13,0,15,0,-1],
---   [-1,-1,8,0,0],
---   [1,0,0,0,6]
+--   [0,0,0,0,17],
+--   [0,0,0,0,-1],
+--   [-1,-1,0,0,0],
+--   [1,0,0,0,0]
 --   ]
+table = [
+  [0,11,0,0,17],
+  [13,0,15,0,-1],
+  [-1,-1,8,4,0],
+  [1,0,0,0,6]
+  ]
 -- table = [
 --     [0, 0, 0, 0, 0, -1, -1, -1],
 --     [0,0,0,0,0, -1,-1,-1],
@@ -53,11 +57,20 @@ printNRandom n seed = do
 
 main :: IO ()
 main = do
-    let n = 20
-    currTime <- getCurrentTime
-    let timed = floor $ utctDayTime currTime :: Int
-    let seed = mkStdGen (timed)
+    -- let n = 20
+    -- currTime <- getCurrentTime
+    -- let timed = floor $ utctDayTime currTime :: Int
+    -- let seed = mkStdGen (timed)
     -- let lis = [2..26] :: [Int]s
-    
-    printNRandom n seed
+    let hidato = convertToHidatoBoard table
+    let initialPos = findElement (board hidato) (minVal hidato) 
+    let solutions = findHidatosSolutions hidato initialPos
+    let sol = filter isJust solutions
+    printHidatosSolutions sol
+    -- let possibleNumber = getLine
+    -- putStrLn $ possibleNumber >>= printNumber
+    -- getLine >>= (\line -> putStrLn $ printNumber line)
+    -- fromMaybe 
+    -- let parsedNumber = readMaybe possibleNumber :: Maybe Int
+    putStrLn (showBoard hidato)
 

@@ -6,7 +6,7 @@ data Cell a = Cell
     {
         position :: (Int, Int),
         value :: a
-    }
+    } deriving (Show, Eq)
 
 type CellTable = [[Cell Int]]
 
@@ -15,6 +15,31 @@ data HidatoBoard = Board
     , minVal :: Int
     , maxVal :: Int
     } | Empty deriving (Show, Eq)
+
+----------------------------------------------------------------------
+
+addCellToHidatoBoard :: HidatoBoard -> Cell Int -> HidatoBoard
+addCellToHidatoBoard hidatoBoard cell = do
+    let pos = position cell
+    let val = value cell
+    let newTable = replaceAt pos val $ board hidatoBoard
+    Board newTable (minVal hidatoBoard) (maxVal hidatoBoard)
+
+
+-- Agrega una lista de celdas al Hidato
+addCellsToHidatoBoard :: HidatoBoard -> [Cell Int] -> HidatoBoard
+addCellsToHidatoBoard hidatoBoard [] = hidatoBoard
+addCellsToHidatoBoard hidatoBoard (x:xs) = do
+    let newHidato = addCellToHidatoBoard hidatoBoard x
+    addCellsToHidatoBoard newHidato xs
+
+gameEnd :: HidatoBoard -> Bool
+gameEnd hidato = do
+    let condition = (maxVal hidato) - (minVal hidato) - length (Utils.getNumbers (board hidato)) + 1 == 0
+    let nextMaxValue = (maxVal hidato) - 1
+    let nextMaxValuePosition = Utils.findElement (board hidato) nextMaxValue
+    let maxValuePosition = Utils.findElement (board hidato) (maxVal hidato)
+    condition && Utils.neighborPositions nextMaxValuePosition maxValuePosition
 
 -----------------------------------------------------------
 
@@ -86,3 +111,17 @@ extractHidatoBoard x =
     case x of
         Nothing -> Empty
         Just val -> val
+
+------------------------------------ Borrar ------------------------------
+
+printHidato :: Maybe HidatoBoard -> String
+printHidato mh =
+  case mh of
+    Just hidato -> showBoard hidato
+    Nothing -> ""
+
+printHidatosSolutions :: [Maybe HidatoBoard] -> IO ()
+printHidatosSolutions [] = putStrLn ""
+printHidatosSolutions (x:xs) = do
+  putStrLn $ printHidato x
+  printHidatosSolutions xs

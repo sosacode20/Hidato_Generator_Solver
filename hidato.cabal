@@ -22,7 +22,7 @@ extra-source-files: CHANGELOG.md
 
 -- Esto siguiente es agregado por mi
 common common-all
-    build-depends:    base ^>=4.16.1.0, random ^>= 1.2.1.1
+    build-depends:    base ^>=4.16.1.0, random ^>= 1.2.1.1, time ^>= 1.12.2
     default-language: Haskell2010
     -- ghc-options:      -Wall -Werror
     ghc-options:      -Wall -O2
@@ -37,6 +37,18 @@ library
 
     -- exposed-modules: Utils,HidatoGenerator
     hs-source-dirs:   src
+
+executable hidato
+    import:           common-all
+    main-is:          Main.hs
+
+    other-modules:
+        Utils,
+        HidatoCommon,
+        HidatoSolver,
+        HidatoGenerator
+    hs-source-dirs:   app, src
+    -- ghc-options:      -main-is MainSolver
 
 executable hidatosolver
     import:           common-all

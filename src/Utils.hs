@@ -8,6 +8,18 @@ import Data.Maybe (fromJust)
 import Data.List
 -- import Data.Unique
 
+rotationDir:: [(Int,Int)]->Int-> [(Int,Int)]
+rotationDir [] _ = []
+rotationDir (x:xs) n = do
+    let large = length (x:xs)
+    let condition = n < 0 || n >= large
+    if condition then do
+        let newN = n `mod`  large
+        rotationDir (x:xs) newN
+    else do
+        let (y,ys) = splitAt n (x:xs)
+        ys<>y
+
 --------------------------- Finds the position of an element  ---------------------------
 findElement :: [[Int]] -> Int -> (Int, Int)
 findElement cells el = (x, y)
@@ -37,6 +49,15 @@ isUnique :: [Int] -> Bool
 isUnique [] = True
 isUnique [_] = True
 isUnique (x:xs) = x `notElem` xs && isUnique xs
+
+----------------
+
+-- Dice si dos posiciones son vecinas
+neighborPositions :: (Int, Int) -> (Int, Int) -> Bool
+neighborPositions (x,y) (x', y') = do
+    let dx = abs $ x - x'
+    let dy = abs $ y - y'
+    dx <= 1 && dy <= 1
 
 ---------------------------------------------------------------------------
 

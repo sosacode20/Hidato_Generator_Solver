@@ -2,11 +2,12 @@ module HidatoSolver where
 
 import HidatoCommon
 import qualified Utils
+-- import Utils (neighborPositions)
 
 solveHidato :: HidatoBoard -> (Int, Int) -> Maybe HidatoBoard
 solveHidato hidatoBoard (x,y)
     | not (validBoard hidatoBoard) = Nothing
-    | (maxVal hidatoBoard) - (minVal hidatoBoard) - length (Utils.getNumbers (board hidatoBoard)) + 1 == 0 = Just hidatoBoard
+    | gameEnd hidatoBoard = Just hidatoBoard
     | otherwise = do
         let dirs = directionFilter (board hidatoBoard) (x,y) directions -- (6,7) --> (7,6)
         let nextNumber = (board hidatoBoard !! x !! y) + 1 -- 5

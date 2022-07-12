@@ -54,6 +54,9 @@ printNumber s = do
     Just n -> show n
     Nothing -> "Invalid Integer"
 
+-- Este main se usa el random para encontrar un Hidato valido
+-- con solución única y por ende hay veces que pone muchos ceros
+-- y otras veces pone muy pocos
 main :: IO ()
 main = do
     putStrLn "\nWelcome to the generator!\n"
@@ -68,12 +71,12 @@ main = do
     let uniqueHidato = generateUniqueHidato hidatoBoard seed
     if isNothing uniqueHidato then putStrLn "No hay un tablero único??... Mhmm, Extraño\n\n"
     else do
-      putStrLn "Hidato con solucion unica:\n\n"
+      putStrLn "Hidato con solución única:\n\n"
       putStrLn $ showBoard $ fromJust uniqueHidato
       putStrLn "\n\n--------------------------------\n\n"
       -- let allSolutions = findHidatosSolutions uniqueHidato initialPos
     
-    let uniqueSolutions = findHidatoSolution hidatoBoard initialPos seed
+    let uniqueSolutions = findHidatoSolution (fromJust uniqueHidato) initialPos seed
     if isNothing uniqueSolutions then putStrLn "El Hidato no tiene solución"
     else do
       let (cells, solution, moreThanOne) = fromJust uniqueSolutions
